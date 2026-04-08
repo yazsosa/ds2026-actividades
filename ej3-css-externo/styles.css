@@ -1,4 +1,4 @@
-/* Variables de colores */
+
 :root {
   --color-primario: #2c3e50;
   --color-secundario: #3498db;
@@ -6,7 +6,7 @@
   --color-texto: #333333;
 }
 
-/* Estilos generales */
+
 body {
   background-color: var(--color-fondo);
   color: var(--color-texto);
@@ -15,7 +15,7 @@ body {
   padding: 0;
 }
 
-/* Selector de etiqueta */
+
 h1 {
   color: var(--color-primario);
   border-bottom: 2px solid var(--color-secundario);
@@ -26,7 +26,7 @@ h2 {
   color: var(--color-secundario);
 }
 
-/* Selector de etiqueta */
+
 a {
   color: var(--color-secundario);
   text-decoration: none;
@@ -36,7 +36,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Selector de clase */
+
 .nav {
   margin: 20px 0;
   font-size: 16px;
