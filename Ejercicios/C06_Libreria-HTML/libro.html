@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Libro</title>
+  <title>Librería Clásica — Libro</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
 
+  
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="index.html">📚 Librería</a>
+      <a class="navbar-brand" href="index.html">📚 Librería Clásica</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -26,7 +26,53 @@
     </div>
   </nav>
 
+  <!-- DETALLE DEL LIBRO -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5 align-items-start" id="book-detail">
+        
+      </div>
+    </div>
+  </section>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/data.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id') || 1;
+    const book = getBookById(id);
+    const detail = document.getElementById('book-detail');
+
+    if (!book) {
+      detail.innerHTML = `
+        <div class="col-12 text-center py-5">
+          <h3>Libro no encontrado</h3>
+          <a href="catalogo.html" class="btn-volver mt-3 d-inline-block">Volver al catálogo</a>
+        </div>
+      `;
+    } else {
+      document.title = `Librería Clásica — ${book.title}`;
+      detail.innerHTML = `
+        <!-- Imagen -->
+        <div class="col-md-5">
+          <img src="${book.image}" class="book-detail-img" alt="${book.title}">
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-7">
+          <span class="book-detail-category">${book.category}</span>
+          <h1 class="book-detail-title">${book.title}</h1>
+          <p class="book-detail-author">${book.author}</p>
+          <div class="section-divider"></div>
+          <p class="book-detail-description">${book.description}</p>
+          <p class="book-detail-price">$${book.price.toLocaleString('es-AR')}</p>
+          <div class="d-flex gap-3 flex-wrap">
+            <button class="btn-comprar btn">Comprar</button>
+            <a href="catalogo.html" class="btn-volver">Volver al catálogo</a>
+          </div>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>
