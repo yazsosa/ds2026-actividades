@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import BookCard from '../components/BookCard'
-import Layout from '../layout/Layout'
 
 const allBooks = [
   { id: 1, title: 'El Señor de los Anillos', author: 'J.R.R. Tolkien', cover: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1566425108i/33.jpg', price: 25000 },
@@ -23,44 +22,44 @@ export default function Home() {
   )
 
   return (
-    <Layout query={query} setQuery={setQuery}>
-      <div
+    <main
+      style={{
+        maxWidth: '1100px',
+        margin: '3rem auto',
+        padding: '0 1.5rem',
+      }}
+    >
+      <input
+        type="text"
+        placeholder="Buscar libro..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         style={{
-          maxWidth: '1100px',
-          margin: '3rem auto',
-          padding: '0 1.5rem',
           width: '100%',
+          padding: '0.8rem',
+          marginBottom: '2rem',
         }}
-      >
-        <h2
+      />
+
+      <h2>
+        {query ? `Resultados para "${query}"` : 'Libros destacados'}
+      </h2>
+
+      {filtered.length === 0 ? (
+        <p>No se encontraron libros.</p>
+      ) : (
+        <div
           style={{
-            fontSize: '1.6rem',
-            fontWeight: 700,
-            marginBottom: '2rem',
-            color: '#2b3a2b',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1.5rem',
           }}
         >
-          {query ? `Resultados para "${query}"` : 'Libros destacados'}
-        </h2>
-
-        {filtered.length === 0 ? (
-          <p style={{ color: '#5a7a7a' }}>
-            No se encontraron libros.
-          </p>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '1.5rem',
-            }}
-          >
-            {filtered.map((book) => (
-              <BookCard key={book.id} {...book} />
-            ))}
-          </div>
-        )}
-      </div>
-    </Layout>
+          {filtered.map((book) => (
+            <BookCard key={book.id} {...book} />
+          ))}
+        </div>
+      )}
+    </main>
   )
 }
