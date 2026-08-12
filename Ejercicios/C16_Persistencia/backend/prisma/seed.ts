@@ -1,0 +1,163 @@
+import { prisma } from "../src/config/prisma";
+
+const libros = [
+  {
+    titulo: "El Señor de los Anillos",
+    autor: "J.R.R. Tolkien",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1566425108i/33.jpg",
+    precio: 25000,
+    disponible: true,
+  },
+  {
+    titulo: "Harry Potter y la Piedra Filosofal",
+    autor: "J.K. Rowling",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022i/3.jpg",
+    precio: 18000,
+    disponible: true,
+  },
+  {
+    titulo: "Cien Años de Soledad",
+    autor: "Gabriel García Márquez",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1327881361i/320.jpg",
+    precio: 21000,
+    disponible: true,
+  },
+  {
+    titulo: "1984",
+    autor: "George Orwell",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1532714506i/40961427.jpg",
+    precio: 15000,
+    disponible: true,
+  },
+  {
+    titulo: "El Principito",
+    autor: "Antoine de Saint-Exupéry",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1367545443i/157993.jpg",
+    precio: 12000,
+    disponible: true,
+  },
+  {
+    titulo: "Orgullo y Prejuicio",
+    autor: "Jane Austen",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1320399351i/1885.jpg",
+    precio: 17000,
+    disponible: true,
+  },
+  {
+    titulo: "Crimen y Castigo",
+    autor: "Fiódor Dostoyevski",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1382846449i/7144.jpg",
+    precio: 28000,
+    disponible: true,
+  },
+  {
+    titulo: "Fahrenheit 451",
+    autor: "Ray Bradbury",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1383718290i/13079982.jpg",
+    precio: 19000,
+    disponible: true,
+  },
+  {
+    titulo: "Drácula",
+    autor: "Bram Stoker",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1387151694i/17245.jpg",
+    precio: 14500,
+    disponible: true,
+  },
+  {
+    titulo: "El Alquimista",
+    autor: "Paulo Coelho",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1654371463i/18144590.jpg",
+    precio: 16000,
+    disponible: true,
+  },
+  {
+    titulo: "Mujercitas",
+    autor: "Louisa May Alcott",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1562690475i/1934.jpg",
+    precio: 14500,
+    disponible: true,
+  },
+  {
+    titulo: "Los Juegos del Hambre",
+    autor: "Suzanne Collins",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1447303603i/2767052.jpg",
+    precio: 22000,
+    disponible: true,
+  },
+  {
+    titulo: "Percy Jackson y el ladrón del rayo",
+    autor: "Rick Riordan",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1400602609i/28187.jpg",
+    precio: 20000,
+    disponible: true,
+  },
+  {
+    titulo: "El Retrato de Dorian Gray",
+    autor: "Oscar Wilde",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1546103428i/5297.jpg",
+    precio: 21000,
+    disponible: true,
+  },
+  {
+    titulo: "Las Crónicas de Narnia",
+    autor: "C.S. Lewis",
+    imagen:
+      "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1449868701i/11127.jpg",
+    precio: 26000,
+    disponible: true,
+  },
+];
+
+const autores = [
+  { nombre: "J.R.R. Tolkien", nacionalidad: "Británica" },
+  { nombre: "J.K. Rowling", nacionalidad: "Británica" },
+  { nombre: "Gabriel García Márquez", nacionalidad: "Colombiana" },
+  { nombre: "George Orwell", nacionalidad: "Británica" },
+  { nombre: "Antoine de Saint-Exupéry", nacionalidad: "Francesa" },
+  { nombre: "Jane Austen", nacionalidad: "Británica" },
+  { nombre: "Fiódor Dostoyevski", nacionalidad: "Rusa" },
+  { nombre: "Ray Bradbury", nacionalidad: "Estadounidense" },
+  { nombre: "Bram Stoker", nacionalidad: "Irlandesa" },
+  { nombre: "Paulo Coelho", nacionalidad: "Brasileña" },
+  { nombre: "Louisa May Alcott", nacionalidad: "Estadounidense" },
+  { nombre: "Suzanne Collins", nacionalidad: "Estadounidense" },
+  { nombre: "Rick Riordan", nacionalidad: "Estadounidense" },
+  { nombre: "Oscar Wilde", nacionalidad: "Irlandesa" },
+  { nombre: "C.S. Lewis", nacionalidad: "Británica" },
+];
+
+async function main() {
+  await prisma.libro.createMany({
+    data: libros,
+  });
+
+  await prisma.autor.createMany({
+    data: autores,
+  });
+
+  console.log("Seed completado correctamente");
+}
+
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
