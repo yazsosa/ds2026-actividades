@@ -1,0 +1,134 @@
+@baseUrl = http://localhost:3000
+
+### Hello
+GET {{baseUrl}}/
+
+### Listar libros
+GET {{baseUrl}}/libros
+
+### Detalle de libro existente
+GET {{baseUrl}}/libros/1
+
+### 404 - libro inexistente
+GET {{baseUrl}}/libros/9999
+
+### 400 - id inválido
+GET {{baseUrl}}/libros/abc
+
+
+### Crear libro
+POST {{baseUrl}}/libros
+Content-Type: application/json
+
+{
+  "titulo": "Rayuela",
+  "precio": 23000,
+  "imagen": "https://ejemplo.com/rayuela.jpg",
+  "disponible": true,
+  "autorId": 1
+}
+
+### 400 - libro sin título
+POST {{baseUrl}}/libros
+Content-Type: application/json
+
+{
+  "precio": 5000,
+  "imagen": "https://ejemplo.com/libro.jpg",
+  "autorId": 1
+}
+
+### 404 - autor inexistente
+POST {{baseUrl}}/libros
+Content-Type: application/json
+
+{
+  "titulo": "Huérfano",
+  "precio": 5000,
+  "imagen": "https://ejemplo.com/huerfano.jpg",
+  "autorId": 9999
+}
+
+### Actualizar libro
+PUT {{baseUrl}}/libros/1
+Content-Type: application/json
+
+{
+  "precio": 26000
+}
+
+### 404 - actualizar libro inexistente
+PUT {{baseUrl}}/libros/9999
+Content-Type: application/json
+
+{
+  "precio": 25000
+}
+
+### Eliminar libro
+DELETE {{baseUrl}}/libros/15
+
+### 400 - eliminar con id inválido
+DELETE {{baseUrl}}/libros/abc
+
+
+### Listar autores
+GET {{baseUrl}}/autores
+
+### Detalle autor existente
+GET {{baseUrl}}/autores/1
+
+### 404 - autor inexistente
+GET {{baseUrl}}/autores/9999
+
+### 400 - id inválido
+GET {{baseUrl}}/autores/abc
+
+
+### Crear autor
+POST {{baseUrl}}/autores
+Content-Type: application/json
+
+{
+  "nombre": "Julio Cortázar",
+  "nacionalidad": "Argentina"
+}
+
+### 400 - autor sin nombre
+POST {{baseUrl}}/autores
+Content-Type: application/json
+
+{
+  "nacionalidad": "Argentina"
+}
+
+### 409 - autor duplicado
+POST {{baseUrl}}/autores
+Content-Type: application/json
+
+{
+  "nombre": "Gabriel García Márquez",
+  "nacionalidad": "Colombia"
+}
+
+### Actualizar autor
+PUT {{baseUrl}}/autores/16
+Content-Type: application/json
+
+{
+  "nacionalidad": "Argentina"
+}
+
+### 404 - actualizar autor inexistente
+PUT {{baseUrl}}/autores/9999
+Content-Type: application/json
+
+{
+  "nombre": "Autor inexistente"
+}
+
+### 409 - borrar autor con libros relacionados
+DELETE {{baseUrl}}/autores/1
+
+### Eliminar autor sin libros
+DELETE {{baseUrl}}/autores/16
