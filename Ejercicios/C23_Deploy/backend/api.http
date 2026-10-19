@@ -1,0 +1,287 @@
+@baseUrl = http://localhost:3000
+
+###############################################
+# C18 - AUTENTICACIÓN Y AUTORIZACIÓN
+###############################################
+
+### 1 - Registro correcto → 201 sin passwordHash
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "email": "ana@libreria.test",
+  "password": "Libreria2026"
+}
+
+
+### 2 - Registro con mismo email → 409
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Ana duplicada",
+  "email": "ana@libreria.test",
+  "password": "Libreria2026"
+}
+
+
+### 3 - Password débil → 400
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Usuario débil",
+  "email": "debil@libreria.test",
+  "password": "corta"
+}
+
+
+### 4 - Login con email inexistente → 401
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "noexiste@libreria.test",
+  "password": "Cualquier123"
+}
+
+
+### 5 - Login con contraseña incorrecta → 401
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente@libreria.test",
+  "password": "Incorrecta123"
+}
+
+
+### 6 - Login CLIENTE correcto → 200 con token
+# @name loginCliente
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente@libreria.test",
+  "password": "Cliente1234"
+}
+
+
+### Capturar token CLIENTE
+@tokenCliente = {{loginCliente.response.body.token}}
+
+
+### 7 - GET /yo sin token → 401
+GET {{baseUrl}}/api/auth/yo
+
+
+### 8 - GET /yo con token CLIENTE → 200
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer {{tokenCliente}}
+
+
+### 9 - Crear libro sin token → 401
+POST {{baseUrl}}/api/libros
+Content-Type: application/json
+
+{
+  "titulo": "Libro sin autenticación",
+  "precio": 15000,
+  "imagen": "https://ejemplo.com/libro.jpg",
+  "autorId": 1
+}
+
+
+### 10 - Crear libro con CLIENTE → 403
+POST {{baseUrl}}/api/libros
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "titulo": "Libro prohibido para cliente",
+  "precio": 15000,
+  "imagen": "https://ejemplo.com/libro-cliente.jpg",
+  "autorId": 1
+}
+
+
+###############################################
+# LOGIN ADMIN
+###############################################
+
+### Login ADMIN
+# @name loginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@libreria.test",
+  "password": "Admin1234"
+}
+
+
+### Capturar token ADMIN
+@tokenAdmin = {{loginAdmin.response.body.token}}
+
+
+### 11 - Crear libro con ADMIN → 201
+POST {{baseUrl}}/api/libros
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "titulo": "Libro creado por Admin",
+  "precio": 18000,
+  "imagen": "https://ejemplo.com/admin-libro.jpg",
+  "disponible": true,
+  "autorId": 1
+}
+
+
+### 12 - Listar libros sin token → 200
+GET {{baseUrl}}/api/libros
+
+
+###############################################
+# PRUEBAS EXTRA - LIBROS
+###############################################
+
+### Detalle de libro existente → 200
+GET {{baseUrl}}/api/libros/1
+
+
+### Libro inexistente → 404
+GET {{baseUrl}}/api/libros/9999
+
+
+### Id inválido → 400
+GET {{baseUrl}}/api/libros/abc
+
+
+### Actualizar libro sin token → 401
+PUT {{baseUrl}}/api/libros/1
+Content-Type: application/json
+
+{
+  "precio": 26000
+}
+
+
+### Actualizar libro con CLIENTE → 403
+PUT {{baseUrl}}/api/libros/1
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "precio": 26000
+}
+
+
+### Actualizar libro con ADMIN → 200
+PUT {{baseUrl}}/api/libros/1
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "precio": 26000
+}
+
+
+### Eliminar libro con CLIENTE → 403
+DELETE {{baseUrl}}/api/libros/15
+Authorization: Bearer {{tokenCliente}}
+
+
+### Eliminar libro con ADMIN → 204
+DELETE {{baseUrl}}/api/libros/15
+Authorization: Bearer {{tokenAdmin}}
+
+
+###############################################
+# PRUEBAS EXTRA - AUTORES
+###############################################
+
+### Listar autores - público → 200
+GET {{baseUrl}}/api/autores
+
+
+### Detalle autor existente → 200
+GET {{baseUrl}}/api/autores/1
+
+
+### Autor inexistente → 404
+GET {{baseUrl}}/api/autores/9999
+
+
+### Id de autor inválido → 400
+GET {{baseUrl}}/api/autores/abc
+
+
+### Crear autor sin token → 401
+POST {{baseUrl}}/api/autores
+Content-Type: application/json
+
+{
+  "nombre": "Autor sin permiso",
+  "nacionalidad": "Argentina"
+}
+
+
+### Crear autor con CLIENTE → 403
+POST {{baseUrl}}/api/autores
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "nombre": "Autor Cliente",
+  "nacionalidad": "Argentina"
+}
+
+
+### Crear autor con ADMIN → 201
+POST {{baseUrl}}/api/autores
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nombre": "Autor creado por Admin",
+  "nacionalidad": "Argentina"
+}
+
+
+### Autor duplicado con ADMIN → 409
+POST {{baseUrl}}/api/autores
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nombre": "Gabriel García Márquez",
+  "nacionalidad": "Colombiana"
+}
+
+
+### Actualizar autor con CLIENTE → 403
+PUT {{baseUrl}}/api/autores/1
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "nacionalidad": "Británica"
+}
+
+
+### Actualizar autor con ADMIN → 200
+PUT {{baseUrl}}/api/autores/1
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nombre": "J.R.R. Tolkien",
+  "nacionalidad": "Británica"
+}
+
+
+### Borrar autor con libros relacionados usando ADMIN → 409
+DELETE {{baseUrl}}/api/autores/1
+Authorization: Bearer {{tokenAdmin}}
