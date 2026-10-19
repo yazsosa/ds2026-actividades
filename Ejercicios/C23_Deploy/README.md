@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+# C23 — Deploy en la Librería
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
 
-Currently, two official plugins are available:
+Aplicación web de una librería desarrollada con React, TypeScript, Express, Prisma y PostgreSQL.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Este ejercicio consiste en publicar el frontend y el backend en Render, utilizando una base de datos PostgreSQL alojada en Neon.
 
-## React Compiler
+## Aplicación publicada
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend (Render):** https://libreria-c23-frontend.onrender.com
+- **Backend (Render):** https://libreria-c23-backend.onrender.com
+- **API de libros:** https://libreria-c23-backend.onrender.com/api/libros
+- **Repositorio:** https://github.com/yazsosa/ds2026-actividades
 
-## Expanding the ESLint configuration
+## Tecnologías utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Frontend: React, TypeScript y Vite.
+- Backend: Node.js, Express y TypeScript.
+- ORM: Prisma.
+- Base de datos: PostgreSQL en Neon.
+- Hosting: Render.
+- Autenticación: JWT.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Estructura del proyecto
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- `frontend/`: aplicación React.
+- `backend/`: API REST, Prisma, migraciones y datos iniciales.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Funcionalidades verificadas
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Visualización del catálogo con 15 libros.
+- Consulta del detalle de cada libro.
+- Navegación entre páginas y actualización con F5.
+- Inicio y cierre de sesión.
+- Diferenciación de permisos entre administrador y cliente.
+- Acceso al formulario de alta de libros para administradores.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Configuración del despliegue
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**Backend — Render Web Service**
+
+- Root Directory: `Ejercicios/C23_Deploy/backend`
+- Build Command: `npm ci && npx prisma generate`
+- Start Command: `npm start`
+
+**Frontend — Render Static Site**
+
+- Root Directory: `Ejercicios/C23_Deploy/frontend`
+- Build Command: `npm ci && npm run build`
+- Publish Directory: `dist`
+- Variable `VITE_API_URL`: `https://libreria-c23-backend.onrender.com/api`
+
+Para permitir la navegación directa a rutas de React, se configuró en Render una regla `Rewrite` desde `/*` hacia `/index.html`.
+
+## Base de datos
+
+La base de datos PostgreSQL está alojada en Neon. Se aplicaron las migraciones de Prisma y se ejecutó un seed con autores, categorías, 15 libros y usuarios de prueba.
+
+Las credenciales y variables sensibles se mantienen fuera del repositorio mediante archivos de entorno ignorados por Git.
+
+## Estado del proyecto
+
+Frontend, backend, base de datos y autenticación desplegados y probados correctamente.
